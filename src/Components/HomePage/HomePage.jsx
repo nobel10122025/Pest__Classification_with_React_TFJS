@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 // import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-backend-webgl';
+import LoadingPage from '../LoadingPage/LoadingPage';
 
 function HomePage() {
  
@@ -68,11 +69,11 @@ function HomePage() {
         textInputRef.current.value = ''
         const results = await model.predict(preProcessing())
         const value = results.dataSync()
-        console.log(value)
-        const max = Math.max(...value)
-        console.log(max)
+        // console.log(value)
+        let max = Math.max(...value)
+        // console.log(max)
         const indexOfMax = value.indexOf(max)
-        console.log(indexOfMax)
+        max = ((max*100).toFixed(2))
         const pestName = targetList[indexOfMax]
         setResults([pestName , max])
     }
@@ -97,33 +98,38 @@ function HomePage() {
     }, [imageURL])
 
     if (isModelLoading) {
-        return <h2>Model Loading...</h2>
+        return <LoadingPage />
     }
 
     return (
         <div className='homePage'>
-            <h1 className='header'>Image Identification</h1>
+            <h1 className='header'>Pest Identification</h1>
+            <div className="underline"></div>
             <div className='inputHolder'>
                 <input type='file' accept='image/*' capture='camera' className='uploadInput' onChange={uploadImage} ref={fileInputRef} />
                 <button className='uploadImage' onClick={triggerUpload}>Upload Image</button>
                 {/* <span className='or'>OR</span> */}
-                <input type="text" placeholder='Paster image URL' ref={textInputRef} onChange={handleOnChange} />
+                <input type="text" placeholder='Paste image URL' ref={textInputRef} onChange={handleOnChange} />
             </div>
             <div className="mainWrapper">
                 <div className="imageHolder">
                     {imageURL && <img src={imageURL} alt="Upload Preview" crossOrigin="anonymous" ref={imageRef} />}
                 </div>
                 
-                {imageURL && <button className='button' onClick={identify}>Identify Image</button>}
-                {results.length > 0 && <div className='resultsHolder'>
-                        <div className='result'>
-                            <span className='name'>{results[0]}</span>
-                            <span className='confidence'>Confidence level: {(results[1]* 100)}%</span>
-                        </div>
-                    </div>}
+                {imageURL && <button className='button' onClick={identify}>Identify Pest</button>}
+                {results.length > 0 && results[1] > 60 ?
+                    (<div className='resultsHolder'>   
+                        <span className='name'>It's a {results[0]}</span><br/>
+                        <span className='confidence'>Confidence level: {(results[1])}%</span>
+                    </div>) :
+                    (<div className='errorHolder' style={{display: `${results.length ===0 ? 'none' : null}`}}>
+                        <span className='errorMessage'>No Pest Found !! Sorry</span>
+                    </div>)
+                }
             </div>
             {history.length > 0 && <div className="recentPredictions">
                 <h2>Recent Images</h2>
+                <div className="underline"></div>
                 <div className="recentImages">
                     {history.map((image, index) => {
                         return (

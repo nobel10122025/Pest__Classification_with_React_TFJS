@@ -5,41 +5,89 @@
     margin: 0;
     padding: 0;
 }
+// $textColor : #053220;
+$textColor : hsl(120, 100%, 20%);
+$backgroundColor : #f8f398;
+$errorColor : #d34c26;
+$messageColor : #144c52;
+
 
 @mixin button-style{
     outline: 0;
-    background-color: green;
+    background-color: $textColor;
     color: white;
     padding: 1rem 2rem;
-    border: 2px solid white;
+    border: 2px solid transparent;
     border-radius: 0.5rem;
     font-size: 1rem;
     cursor: pointer;
     transition: all 300ms ease-in;
     font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    
     &:hover{
-        color: green;
-        background-color: white;
-        border: 2px solid green;
+        color: $textColor;
+        background-color: transparent;
+        border: 2px solid $textColor;
     }
+}
+@mixin message{
+    color: white;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+@mixin underline-style {
+    height: 5px;
+    background: $textColor;
+    position: relative;
+    left:50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
 }
 
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Montserrat', sans-serif;
 }
-.header{
-    background: hsl(120, 100%, 15%);
-    color: white;
+
+.homePage{
+    background: url(../src/Assets/bg_leaf.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: hsla(123, 86%, 67%, 0.75);
+    background-blend-mode:soft-light;
+    // background-color: $backgroundColor;
+    min-height: 100vh;
+    height: auto;
+
+    .header{
+        color: $textColor;
+        text-align: center;
+        padding-top: 1rem;
+        @media (max-width:525px) {
+            font-size: 1.5rem;
+        }
+    }
+    .underline{
+       @include underline-style;
+        margin: 1rem 0rem;
+        width: 200px;
+        @media (max-width:525px) {
+            width: 100px;
+        }
+      }
 }
 .inputHolder{
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-around;
     margin: 2rem;
+
+    @media (max-width:525px) {
+        flex-direction: column;
+        margin: 0;
+    }
     
     input.uploadInput{
         display: none;
@@ -56,9 +104,13 @@ body {
         border: 2px solid hsl(0, 0%, 83%);
         outline: 0;
         border-radius: 0.5rem;
+
+        @media (max-width:525px) {
+            margin: 2rem;
+        }
     }
     input:focus{
-        border: 2px solid hsl(0, 0%, 23%);
+        border: 2px solid $textColor;
 
     }
     .or{
@@ -67,9 +119,16 @@ body {
 }
 .mainWrapper{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    // flex-direction: column;
+    justify-content: space-around;
     align-items: center;
+
+    @media (max-width:725px) {
+        flex-direction: column;
+    }
+    @media (max-width:525px) {
+        flex-direction: column-reverse;
+    }
 
     .imageHolder{
         display: flex;
@@ -78,12 +137,74 @@ body {
 
         img{
             object-fit: scale-down;
-            height: 300px;
-            aspect-ratio: 1.5;
+            width: 200px;
+            min-height: 200px;
+            height: auto
         }
     }
     .button{
         @include button-style;
         width: 15rem;
+        margin: 2rem 0rem;
+    }
+    .resultsHolder{
+        @include message;
+        background-color: $messageColor;
+       
+
+        .name{
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+    }
+    .errorHolder{
+        @include message;
+        background-color: $errorColor;
+        
+        .errorMessage{
+            font-weight: 500;
+        }
+    }
+}
+.recentPredictions{
+    text-align: center;
+    margin-top: 2rem;
+
+    h2{
+        color: $textColor;
+    }
+    .underline{
+        @include underline-style;
+        width: 100px;
+    }
+    
+    .recentImages{
+        display: grid;
+        grid-template-columns: repeat(5 , 1fr);
+        grid-gap: 1rem;
+
+        @media (max-width:1200px) {
+            grid-template-columns: repeat(4 , 1fr);
+        }
+        @media (max-width:900px) {
+            grid-template-columns: repeat(3 , 1fr);
+        }
+        @media (max-width:725px) {
+            grid-template-columns: repeat(2 , 1fr);
+            grid-gap: 0rem;
+        }
+        @media (max-width:400px) {
+            grid-template-columns:1fr;
+        }
+        
+        .recentPrediction{
+            
+            img{
+                width: 200px;
+                height: 200px;
+                object-fit:scale-down;
+                cursor: pointer;
+            }
+        }
     }
 }
