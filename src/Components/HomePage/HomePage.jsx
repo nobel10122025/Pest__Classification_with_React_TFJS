@@ -106,9 +106,8 @@ function HomePage() {
             <h1 className='header'>Pest Identification</h1>
             <div className="underline"></div>
             <div className='inputHolder'>
-                <input type='file' accept='image/*' capture='camera' className='uploadInput' onChange={uploadImage} ref={fileInputRef} />
+                <input type='file' accept='image/*' className='uploadInput' onChange={uploadImage} ref={fileInputRef} />
                 <button className='uploadImage' onClick={triggerUpload}>Upload Image</button>
-                {/* <span className='or'>OR</span> */}
                 <input type="text" placeholder='Paste image URL' ref={textInputRef} onChange={handleOnChange} />
             </div>
             <div className="mainWrapper">
